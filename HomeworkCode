@@ -1,0 +1,25 @@
+import math
+# Function to calculate the area of a circle
+def area_of_circle(radius):
+    return math.pi * (radius ** 2)
+
+# Function to calculate the area of a square
+def area_of_square(side_length):
+    return side_length ** 2
+
+# Calculating the area of a circle with radius 2
+circle_area = area_of_circle(2)
+
+# Calculating the area of a square with side length 3
+square_area = area_of_square(3)
+
+# Comparing the areas
+if circle_area > square_area:
+    result = "The circle has more area."
+elif square_area > circle_area:
+    result = "The square has more area."
+else:
+    result = "The circle and the square have the same area."
+
+# Output the result
+result
