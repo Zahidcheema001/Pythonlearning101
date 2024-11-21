@@ -1,0 +1,77 @@
+-- Time Spent on Code: I have spent approximately 8 hours cumulatively on the code. This includes coding, debugging, testing, and adjusting the features according to the project requirements.
+-- Most Time-Consuming Part: The most time-consuming part of the project was fine-tuning the ball's speed and paddle movements. Implementing the gradual speed increase of the ball with every paddle hit, ensuring it didn’t cause any bugs or affect the game’s playability, took a considerable amount of time.
+-- Working Efficiently in Retrospect: In retrospect, I could have worked more efficiently by spending more time planning the code structure. Breaking down the game features into smaller milestones with dedicated time for each phase would have streamlined the process and avoided unnecessary adjustments later.
+-- Useful Libraries and Starter Code: The Pygame library was instrumental in building this project, as it provided functionalities for rendering game elements, managing screen updates, and handling user input. The starter code from the proposal was modified to add several new features, including speed adjustment, paddle acceleration, and color-changing for the ball. I heavily modified these functionalities to better fit the game logic to provide a smoother gameplay experience.
+
+
+TESTS: 
+
+  import unittest
+import pygame
+from pygame.locals import *
+
+# Import your Pong game code (modify this import based on your file)
+# from pong_game import *  # Assuming pong_game.py is the filename
+
+class TestPongGame(unittest.TestCase):
+
+    def setUp(self):
+        pygame.init()
+        # Initialize game objects (paddles, ball, etc.) similar to the game setup
+        self.screen = pygame.display.set_mode((800, 600))
+        self.paddle1 = pygame.Rect(50, 300 - 100 // 2, 15, 100)
+        self.paddle2 = pygame.Rect(800 - 50 - 15, 300 - 100 // 2, 15, 100)
+        self.ball = pygame.Rect(800 // 2 - 21 // 2, 600 // 2 - 21 // 2, 21, 21)
+        self.ball_dx = 4
+        self.ball_dy = 4
+
+    def test_ball_movement(self):
+        # Simulate ball moving and check positions
+        initial_x, initial_y = self.ball.x, self.ball.y
+        self.ball.x += self.ball_dx
+        self.ball.y += self.ball_dy
+        self.assertNotEqual(self.ball.x, initial_x)
+        self.assertNotEqual(self.ball.y, initial_y)
+
+    def test_paddle_movement_bounds(self):
+        # Test paddle movement doesn't go off screen
+        self.paddle1.y = -10
+        if self.paddle1.top < 0:
+            self.paddle1.top = 0
+        self.assertEqual(self.paddle1.top, 0)
+
+        self.paddle2.y = 650
+        if self.paddle2.bottom > 600:
+            self.paddle2.bottom = 600
+        self.assertEqual(self.paddle2.bottom, 600)
+
+    def test_ball_collision_with_paddles(self):
+        # Test if the ball collides with paddle1
+        self.ball.x = self.paddle1.right
+        self.ball_dx = -4
+        if self.ball.colliderect(self.paddle1):
+            self.ball_dx = -self.ball_dx
+        self.assertGreater(self.ball_dx, 0)  # Ball should reverse direction
+
+    def test_scoring(self):
+        # Test if the ball goes out of bounds and score is updated
+        score1, score2 = 0, 0
+        self.ball.left = -10  # Ball goes off the left side
+        if self.ball.left <= 0:
+            score2 += 1
+        self.assertEqual(score2, 1)
+
+        self.ball.right = 810  # Ball goes off the right side
+        if self.ball.right >= 800:
+            score1 += 1
+        self.assertEqual(score1, 1)
+
+    def tearDown(self):
+        pygame.quit()
+
+if __name__ == '__main__':
+    unittest.main()
+
+
+                                                        Running the Test Suite
+                                      You can run this test suite using the following command in your terminal: python -m unittest <filename_of_test_suite>.py

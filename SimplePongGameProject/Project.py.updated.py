@@ -156,7 +156,7 @@ while running:
         pygame.mixer.Sound.play(roar)
     if ball.right >= SCREEN_WIDTH:
         score1 += 1
-        reset_ball()
+        reset_ball():
         pygame.mixer.Sound.play(bellsound)
 
     if ball.colliderect(paddle1) and ball_dx < 0:  # Ball hits left paddle
@@ -190,3 +190,5 @@ while running:
     pygame.time.Clock().tick(60)
 
 pygame.quit()
+
+#NOTE- Try to orgranize the code better.
