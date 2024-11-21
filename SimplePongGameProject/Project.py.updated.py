@@ -4,7 +4,10 @@ import time
 
 # Initialize Pygame
 pygame.init()
-
+# Initialize Pygame mixer for sound
+pygame.mixer.init()
+roar = pygame.mixer.Sound(r'C:\Users\cheem\Downloads\ProgrammingInPython\Pythonlearning101\SimplePongGameProject\GameSounds\roar.mp3')
+bellsound = pygame.mixer.Sound(r'C:\Users\cheem\Downloads\ProgrammingInPython\Pythonlearning101\SimplePongGameProject\GameSounds\taco.bellsound.mp3')
 # Constants
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -137,7 +140,7 @@ while running:
         new_color = random_color()
         ball_colors.append(new_color)  # Add a new random color to the list
         current_color_index = (current_color_index + 1) % len(ball_colors)  # Cycle through colors
-
+        pygame.mixer.Sound.play(roar)
     if ball.colliderect(paddle2) and ball_dx > 0:  # Ball moving towards paddle2
         ball.right = paddle2.left  # Adjust ball position to the left of paddle2
         ball_dx = -ball_dx * 1.05  # Increase speed by 5%
@@ -145,14 +148,29 @@ while running:
         new_color = random_color()
         ball_colors.append(new_color)  # Add a new random color to the list
         current_color_index = (current_color_index + 1) % len(ball_colors)  # Cycle through colors
-
+        pygame.mixer.Sound.play(bellsound)
     # Ball out of bounds
     if ball.left <= 0:
         score2 += 1
         reset_ball()
+        pygame.mixer.Sound.play(roar)
     if ball.right >= SCREEN_WIDTH:
         score1 += 1
         reset_ball()
+        pygame.mixer.Sound.play(bellsound)
+
+    if ball.colliderect(paddle1) and ball_dx < 0:  # Ball hits left paddle
+        ball.left = paddle1.left
+        ball_dx = -ball_dx * 1.05
+        ball_dy *= 1.05
+        pygame.mixer.Sound.play(roar)
+    if ball.colliderect(paddle2) and ball_dx > 0:  # Ball hits right paddle
+        ball.right = paddle2.left
+        ball_dx = -ball_dx * 1.05
+        ball_dy *= 1.05
+        pygame.mixer.music.load(r'C:\Users\cheem\Downloads\ProgrammingInPython\Pythonlearning101\SimplePongGameProject\GameSounds\roar.mp3')
+        pygame.mixer.music.play()
+
 
     # Draw game elements
     screen.fill(BLACK)  # Fill the screen with a black color before drawing
